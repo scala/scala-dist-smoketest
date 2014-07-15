@@ -1,21 +1,23 @@
 versionWithGit
 
-scalaVersion := version.value
+val scalaDistVersion = settingKey[String]("e.g. 2.11.1")
 
-libraryDependencies += "org.scala-lang" % "scala-dist" % version.value
+scalaDistVersion := "2.11.1"
 
-// TODO: find out how to enable continuations plugin. also un-comment ContinuationsTest afterwards!
-// http://stackoverflow.com/questions/24755254/how-to-enable-compiler-plugin-from-librarydependencies
+scalaVersion := scalaDistVersion.value
 
-//autoCompilerPlugins := true
+libraryDependencies += "org.scala-lang" % "scala-dist" % scalaDistVersion.value
 
-//val addContinuationsPlugin = taskKey[Unit]("Add continuations plugin")
+scalacOptions += "-P:continuations:enable"
 
-//addContinuationsPlugin := {
-//  println(update.value.allModules.find(_.name contains "continuations-plugin"))
-//  compilerPlugin(update.value.allModules.find(_.name contains "continuations-plugin").get)
-//}
-
-//libraryDependencies += compilerPlugin(update.value.allModules.find(_.name contains "continuations-plugin").get)
-
-//scalacOptions += "-P:continuations:enable"
+// We add the plugin JAR to the classpath manually with -Xplugin, rather than
+// relying on `autoCompilerPlugins`, which is not straight forward if we want
+// to look up the versions of the continuations plugin from within `scala-dist.pom.`
+//
+// Discussion: http://stackoverflow.com/questions/24755254/how-to-enable-compiler-plugin-from-librarydependencies
+scalacOptions in Compile += {
+  val cp = (externalDependencyClasspath in Compile).value
+  def fail = sys.error("plugin not found in " + cp)
+  val plugin = cp.find(_.data.getName contains "continuations-plugin").getOrElse(fail)
+  "-Xplugin:" + plugin.data
+}
