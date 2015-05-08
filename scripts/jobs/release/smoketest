@@ -5,7 +5,7 @@
 rm -rf $WORKSPACE/ivy2
 
 sbt -Dsbt.log.noformat=true -Dsbt.ivy.home=$WORKSPACE/ivy2 \
-  'set resolvers += "private-repo" at "http://private-repo.typesafe.com/typesafe/scala-release-temp/"' \
+  'set resolvers += "private-repo" at "https://scala-ci.typesafe.com/artifactory/scala-release-temp/"' \
   $sbtDistVersionOverride \
   clean run
 
