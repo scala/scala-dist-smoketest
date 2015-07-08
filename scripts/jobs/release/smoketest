@@ -42,7 +42,7 @@ testCommand() {
   }
 }
 
-testCommand "scalac" "optimise"
+testCommand "scalac" "classpath"
 testCommand "fsc" "shutdown"
 testCommand "scaladoc" "doc-title"
 
