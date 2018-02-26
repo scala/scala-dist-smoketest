@@ -1,12 +1,25 @@
 #!/bin/bash -ex
 
-# This script requires sbtDistVersionOverride=-Dproject.version=...
+function ensureVersion() {
+  local verPat="[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9-]+)?"
+  [[ "$version" =~ $verPat ]] || {
+    echo "Not a valid Scala version: '$version'"
+    exit 1
+  }
+}
 
-rm -rf $WORKSPACE/ivy2
+if [[ "$TRAVIS_EVENT_TYPE" == "api" ]]; then
+  ensureVersion
+else
+  # Use some recent version to validate changes in smoketest itself
+  version="2.12.4"
+fi
+
+sbtDistVersionOverride="-Dproject.version=$version"
 
 integrationRepoUrl=${integrationRepoUrl-"https://scala-ci.typesafe.com/artifactory/scala-integration/"}
 
-sbt -Dsbt.log.noformat=true -Dsbt.ivy.home=$WORKSPACE/ivy2 \
+sbt -Dsbt.log.noformat=true \
   "set resolvers += \"scala-integration\" at \"$integrationRepoUrl\"" \
   $sbtDistVersionOverride \
   clean run
