@@ -1,12 +1,35 @@
 #!/bin/bash -ex
 
-# This script requires sbtDistVersionOverride=-Dproject.version=...
+function ensureVersion() {
+  local verPat="[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9-]+)?"
+  [[ "$version" =~ $verPat ]] || {
+    echo "Not a valid Scala version: '$version'"
+    exit 1
+  }
+}
 
-rm -rf $WORKSPACE/ivy2
+clearIvyCache() {
+  rm -fv $HOME/.ivy2/exclude_classifiers $HOME/.ivy2/exclude_classifiers.lock
+  rm -rfv $HOME/.ivy2/cache/org.scala-lang $HOME/.ivy2/cache/org.scala-lang.modules
+  rm -rfv $HOME/.ivy2/local/org.scala-lang $HOME/.ivy2/local/org.scala-lang.modules
+  if [ -d $HOME/.ivy2 ]; then find $HOME/.ivy2 -name "*compiler-interface*$version*" | xargs rm -rfv; fi
+  if [ -d $HOME/.sbt ]; then find $HOME/.sbt -name "*compiler-interface*$version*" | xargs rm -rfv; fi
+}
+
+if [[ "$TRAVIS_EVENT_TYPE" == "api" ]]; then
+  ensureVersion
+else
+  # Use some recent version to validate changes in smoketest itself
+  version="2.12.4"
+fi
+
+clearIvyCache
+
+sbtDistVersionOverride="-Dproject.version=$version"
 
 integrationRepoUrl=${integrationRepoUrl-"https://scala-ci.typesafe.com/artifactory/scala-integration/"}
 
-sbt -Dsbt.log.noformat=true -Dsbt.ivy.home=$WORKSPACE/ivy2 \
+sbt -Dsbt.log.noformat=true \
   "set resolvers += \"scala-integration\" at \"$integrationRepoUrl\"" \
   $sbtDistVersionOverride \
   clean run
