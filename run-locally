@@ -13,10 +13,12 @@ echo "Scala version:" $version
 
 rm -rf $scriptDir/ivy2
 
+integrationRepoUrl="https://scala-ci.typesafe.com/artifactory/scala-integration/"
+sonatypeStagingUrl="https://oss.sonatype.org/content/repositories/staging/"
+
 sbt \
   -Dsbt.log.noformat=true \
   -Dsbt.ivy.home=$scriptDir/ivy2 \
-  -Dsbt.override.build.repos=true \
-  -Dsbt.repository.config=repositories \
   -Dproject.version=$version \
+  "set resolvers ++= List(\"scala-integration\" at \"$integrationRepoUrl\", \"sonatype-staging\" at \"$sonatypeStagingUrl\")" \
   clean run

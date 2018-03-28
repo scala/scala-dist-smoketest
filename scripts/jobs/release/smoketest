@@ -28,9 +28,10 @@ clearIvyCache
 sbtDistVersionOverride="-Dproject.version=$version"
 
 integrationRepoUrl=${integrationRepoUrl-"https://scala-ci.typesafe.com/artifactory/scala-integration/"}
+sonatypeStagingUrl="https://oss.sonatype.org/content/repositories/staging/"
 
 sbt -Dsbt.log.noformat=true \
-  "set resolvers += \"scala-integration\" at \"$integrationRepoUrl\"" \
+  "set resolvers ++= List(\"scala-integration\" at \"$integrationRepoUrl\", \"sonatype-staging\" at \"$sonatypeStagingUrl\")" \
   $sbtDistVersionOverride \
   clean run
 
