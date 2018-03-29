@@ -52,8 +52,8 @@ bin=`pwd`/scala-$version/bin
 
 $bin/scala -e 'assert("11".toInt == 11)'
 
-scalapOutput=`$bin/scalap scala.collection.immutable.List | grep 'def head' | tr -d ' '`
-[[ $scalapOutput == "defhead:A" ]] || {
+scalapOutput=`$bin/scalap scala.collection.immutable.List | grep 'def ::\[' | tr -d ' '`
+[[ $scalapOutput == "def::[B>:A](elem:B):scala.collection.immutable.List[B]={/*compiledcode*/}" ]] || {
   echo "scalap test failed, returned $scalapOutput"
   exit 1
 }
