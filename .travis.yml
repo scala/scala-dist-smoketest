@@ -5,7 +5,7 @@ jdk: openjdk8
 env:
   global:
     # GITHUB_OAUTH_TOKEN (for GitHub user scala-jenkins, same token as scabot)
-    secure: "ErMvEJv2oDyQqclA0IM78thPkZG+0kjBSIKbDtI/PIoaoxMKi+gtsYH92/JFU26oNfDwgqh3B0QwU2niyK3TO0P0xjmrYsvlMXjDwgHX/w+hw7GuIXUp4r8/V1nyNF+9OGlHtNbtbDtFilThI2osS+/G304cNsE4GVa9LRxhzpQ="
+    secure: "JpmPbk0jBrYfeJopnd8PVXKekofEdTMB4jDll8N10WrYiaSEpMcWIBXPG8dYTq3jjC2kYk2DVIzqDCppchr4KcUq0Mu8sigv0LrWcMGRHo1vHB9Od3h+dFuTkjfY9+6dD7rTmLTs4ABCiLT9DxeiryRu1NaUIJfkJLoVi0O0+RQ="
 
 script:
   - source scripts/common
