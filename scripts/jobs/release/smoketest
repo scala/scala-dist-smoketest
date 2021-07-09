@@ -20,7 +20,7 @@ if [[ "$TRAVIS_EVENT_TYPE" == "api" ]]; then
   ensureVersion
 else
   # Use some recent version to validate changes in smoketest itself
-  version="2.13.0-M4-pre-20d3c21"
+  version="2.13.6"
 fi
 
 clearIvyCache
