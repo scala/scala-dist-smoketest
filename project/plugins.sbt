@@ -1,1 +1,1 @@
-addSbtPlugin("com.github.sbt" % "sbt-dynver" % "5.0.0")
+addSbtPlugin("com.github.sbt" % "sbt-git" % "2.0.0")
