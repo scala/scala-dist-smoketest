@@ -31,6 +31,7 @@ integrationRepoUrl=${integrationRepoUrl-"https://scala-ci.typesafe.com/artifacto
 sonatypeStagingUrl="https://oss.sonatype.org/content/repositories/staging/"
 
 sbt -Dsbt.log.noformat=true \
+  -Dsbt.io.jdktimestamps=true \
   "set resolvers ++= List(\"scala-integration\" at \"$integrationRepoUrl\", \"sonatype-staging\" at \"$sonatypeStagingUrl\")" \
   $sbtDistVersionOverride \
   clean run
