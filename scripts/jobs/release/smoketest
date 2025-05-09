@@ -42,8 +42,9 @@ rm -rf sandbox
 mkdir sandbox
 cd sandbox
 
-url="https://downloads.lightbend.com/scala/$version"
-wget -nv -O scala-$version.tgz $url/scala-$version.tgz
+ghUrl="https://github.com/scala/scala/releases/download/v$version"
+lbUrl="https://downloads.lightbend.com/scala/$version"
+wget -nv -O scala-$version.tgz $ghUrl/scala-$version.tgz || wget -nv -O scala-$version.tgz $lbUrl/scala-$version.tgz
 tar xzvf scala-$version.tgz
 
 bin=`pwd`/scala-$version/bin
