@@ -4,8 +4,8 @@ scriptDir="$( cd "$( dirname "$0" )" && pwd )"
 
 function latestNightly() {
   >&2 echo "No Scala version specified. Using latest nightly."
-  url='https://scala-ci.typesafe.com/job/scala-2.12.x-integrate-bootstrap/lastSuccessfulBuild/artifact/jenkins.properties/*view*/'
-  curl -f -s -L $url | grep ^version= | cut -d= -f2
+  url='https://scala-ci.typesafe.com/artifactory/scala-integration/org/scala-lang/scala-dist/maven-metadata.xml'
+  curl -f -s -L $url | grep -o '<version>2\.12\.[^<]*-bin-[^<]*' | tail -1 | cut -d'>' -f2
 }
 
 export version=${version-`latestNightly`}
