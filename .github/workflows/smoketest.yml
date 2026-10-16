@@ -43,7 +43,7 @@ jobs:
         with:
           repository: ${{ !endsWith(github.repository, '/scala-dist-smoketest') && 'scala/scala-dist-smoketest' || '' }}
           ref: ${{ !endsWith(github.repository, '/scala-dist-smoketest') && '2.12.x' || '' }}
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 8
