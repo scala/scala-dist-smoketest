@@ -16,7 +16,7 @@ clearIvyCache() {
   if [ -d $HOME/.sbt ]; then find $HOME/.sbt -name "*compiler-interface*$version*" | xargs rm -rfv; fi
 }
 
-if [[ "$TRAVIS_EVENT_TYPE" == "api" ]]; then
+if [[ -n "$version" ]]; then
   ensureVersion
 else
   # Use some recent version to validate changes in smoketest itself
@@ -28,10 +28,9 @@ clearIvyCache
 sbtDistVersionOverride="-Dproject.version=$version"
 
 integrationRepoUrl=${integrationRepoUrl-"https://scala-ci.typesafe.com/artifactory/scala-integration/"}
-sonatypeStagingUrl="https://oss.sonatype.org/content/repositories/staging/"
 
 sbt -Dsbt.log.noformat=true \
-  "set resolvers ++= List(\"scala-integration\" at \"$integrationRepoUrl\", \"sonatype-staging\" at \"$sonatypeStagingUrl\")" \
+  "set resolvers ++= List(\"scala-integration\" at \"$integrationRepoUrl\")" \
   $sbtDistVersionOverride \
   clean run
 
