@@ -4,8 +4,8 @@ scriptDir="$( cd "$( dirname "$0" )" && pwd )"
 
 function latestNightly() {
   >&2 echo "No Scala version specified. Using latest nightly."
-  url='https://scala-ci.typesafe.com/job/scala-2.13.x-integrate-bootstrap/lastSuccessfulBuild/artifact/jenkins.properties/*view*/'
-  curl -f -s -L $url | grep ^version= | cut -d= -f2
+  url='https://scala-ci.typesafe.com/artifactory/scala-integration/org/scala-lang/scala-dist/maven-metadata.xml'
+  curl -f -s -L $url | grep -o '<version>2\.13\.[^<]*-bin-[^<]*' | tail -1 | cut -d'>' -f2
 }
 
 export version=${version-`latestNightly`}
@@ -14,11 +14,10 @@ echo "Scala version:" $version
 rm -rf $scriptDir/ivy2
 
 integrationRepoUrl="https://scala-ci.typesafe.com/artifactory/scala-integration/"
-sonatypeStagingUrl="https://oss.sonatype.org/content/repositories/staging/"
 
 sbt \
   -Dsbt.log.noformat=true \
   -Dsbt.ivy.home=$scriptDir/ivy2 \
   -Dproject.version=$version \
-  "set resolvers ++= List(\"scala-integration\" at \"$integrationRepoUrl\", \"sonatype-staging\" at \"$sonatypeStagingUrl\")" \
+  "set resolvers ++= List(\"scala-integration\" at \"$integrationRepoUrl\")" \
   clean run
