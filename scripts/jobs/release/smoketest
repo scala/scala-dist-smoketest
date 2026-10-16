@@ -20,7 +20,7 @@ if [[ -n "$version" ]]; then
   ensureVersion
 else
   # Use some recent version to validate changes in smoketest itself
-  version="2.12.4"
+  version="2.12.21"
 fi
 
 clearIvyCache
