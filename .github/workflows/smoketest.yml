@@ -20,7 +20,7 @@ on:
       scala_sha:
         type: string
     secrets:
-      SCALA_REPO_TOKEN:
+      SCALA_STATUS_TOKEN:
         required: false
 
 permissions:
@@ -36,7 +36,6 @@ jobs:
     env:
       version: ${{ inputs.version }}
       scala_sha: ${{ inputs.scala_sha }}
-      SCALA_REPO_TOKEN: ${{ secrets.SCALA_REPO_TOKEN }}
     steps:
       # when called from scala-dist, check out this repo rather than the caller's
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -54,10 +53,13 @@ jobs:
           # the cache is for sbt 2
           disk-cache: false
       - name: Post pending status
+        env:
+          SCALA_STATUS_TOKEN: ${{ secrets.SCALA_STATUS_TOKEN }}
         run: source scripts/common && postCommitStatus pending
       - run: scripts/jobs/release/smoketest
       - name: Post final status
         if: always()
         env:
           JOB_STATUS: ${{ job.status }}
+          SCALA_STATUS_TOKEN: ${{ secrets.SCALA_STATUS_TOKEN }}
         run: source scripts/common && postCommitStatus "${JOB_STATUS/cancelled/error}"
