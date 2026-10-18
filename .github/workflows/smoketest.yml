@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Scala version to test, e.g. 2.13.18
+        description: Scala version to test, e.g. 3.10.0
         required: true
       scala_sha:
         description: Full-length scala/scala commit SHA, to post the result as a commit status
